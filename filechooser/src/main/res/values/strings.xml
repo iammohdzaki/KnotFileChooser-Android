@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">FileChooser</string>
+    <string name="singular_item">%d item</string>
+    <string name="plural_items">%d items</string>
+    <string name="singular_selected_item">%d selected item (%s)</string>
+    <string name="plural_selected_items">%d selected items (%s)</string>
+    <string name="type_folder_name">Type the folder name here</string>
+    <string name="create_new_folder">Create a new folder</string>
+    <string name="back_text">Back</string>
+    <string name="home_text">Home</string>
+    <string name="search_text">Search</string>
 </resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="kfc_theme_background" format="reference" />
+    <attr name="kfc_theme_foreground" format="reference" />
+    <attr name="kfc_theme_title" format="reference" />
+    <attr name="kfc_theme_breadcrumb" format="reference" />
+    <attr name="kfc_theme_toolbox" format="reference" />
+    <attr name="kfc_theme_search_text" format="reference" />
+    <attr name="kfc_theme_search_hint" format="reference" />
+    <attr name="kfc_theme_status" format="reference" />
+    <attr name="kfc_theme_file_icon" format="reference" />
+    <attr name="kfc_theme_file_name" format="reference" />
+    <attr name="kfc_theme_file_information" format="reference" />
+    <attr name="kfc_theme_file_asterisk" format="reference" />
+    <attr name="kfc_theme_file_flag" format="reference" />
+    <attr name="kfc_theme_checkbox" format="reference" />
+    <attr name="kfc_theme_cancel_button" format="reference" />
+    <attr name="kfc_theme_ok_button" format="reference" />
+    <attr name="kfc_theme_create_folder_button" format="reference" />
+</resources>
