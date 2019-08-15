@@ -1,7 +1,7 @@
 # KnotFIleChooser-Android
 
 How To Use
-'''
+```
 KnotFileChooser(this,
                 allowBrowsing = true,
                 allowCreateFolder = true,
@@ -21,9 +21,9 @@ KnotFileChooser(this,
                     Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
                 }
                 .show()
-'''
+```
 Customise
-'''
+```
 <!-- Base application theme. -->
 <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <!-- Customize your theme here. -->
@@ -46,14 +46,14 @@ Customise
     <item name="mfc_theme_ok_button">@color/colorAccent</item>
     <item name="mfc_theme_create_folder_button">@color/verde</item>
 </style>
-'''
+```
 Permissions
-'''
+```
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-'''
+```
 License
-'''
+```
 The MIT License (MIT)
 
 Copyright (c) 2018 Tiago Melo
@@ -75,4 +75,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-'''
+```
