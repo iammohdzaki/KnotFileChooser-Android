@@ -15,7 +15,7 @@ KnotFileChooser(this,
                 showHiddenFiles = false,
                 initialFolder = Environment.getRootDirectory(),
                 restoreFolder = false)
-                .title("Selecione um arquivo")
+                .title("Select a file")
                 .sorter(Sorter.ByNewestModification)
                 .onSelectedFilesListener {
                     Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
@@ -25,27 +25,29 @@ KnotFileChooser(this,
 Customise
 ```
 <!-- Base application theme. -->
-<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-    <!-- Customize your theme here. -->
-    
-    <item name="mfc_theme_background">@color/corDefundo</item>
-    <item name="mfc_theme_foreground">@color/colorPrimary</item>
-    <item name="mfc_theme_title">@color/cinzaEscuro</item>
-    <item name="mfc_theme_breadcrumb">@color/azulClaro</item>
-    <item name="mfc_theme_toolbox">@color/colorPrimary</item>
-    <item name="mfc_theme_search_text">@color/cinzaEscuro</item>
-    <item name="mfc_theme_search_hint">@color/cinzaClaro</item>
-    <item name="mfc_theme_status">@color/colorPrimary</item>
-    <item name="mfc_theme_file_icon">@color/colorPrimary</item>
-    <item name="mfc_theme_file_name">@color/colorPrimary</item>
-    <item name="mfc_theme_file_information">@color/colorAccent</item>
-    <item name="mfc_theme_file_flag">@color/cinzaClaro</item>
-    <item name="mfc_theme_file_asterisk">@color/amarelo</item>
-    <item name="mfc_theme_checkbox">@color/colorAccent</item>
-    <item name="mfc_theme_cancel_button">@color/colorAccent</item>
-    <item name="mfc_theme_ok_button">@color/colorAccent</item>
-    <item name="mfc_theme_create_folder_button">@color/verde</item>
-</style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="kfc_theme_background">@color/corDefundo</item>
+        <item name="kfc_theme_foreground">@color/colorPrimary</item>
+        <item name="kfc_theme_title">@color/cinzaEscuro</item>
+        <item name="kfc_theme_breadcrumb">@color/azulClaro</item>
+        <item name="kfc_theme_toolbox">@color/colorPrimary</item>
+        <item name="kfc_theme_search_text">@color/cinzaEscuro</item>
+        <item name="kfc_theme_search_hint">@color/cinzaClaro</item>
+        <item name="kfc_theme_status">@color/colorPrimary</item>
+        <item name="kfc_theme_file_icon">@color/colorPrimary</item>
+        <item name="kfc_theme_file_name">@color/colorPrimary</item>
+        <item name="kfc_theme_file_information">@color/colorAccent</item>
+        <item name="kfc_theme_file_flag">@color/cinzaClaro</item>
+        <item name="kfc_theme_file_asterisk">@color/amarelo</item>
+        <item name="kfc_theme_checkbox">@color/colorAccent</item>
+        <item name="kfc_theme_cancel_button">@color/colorAccent</item>
+        <item name="kfc_theme_ok_button">@color/colorAccent</item>
+        <item name="kfc_theme_create_folder_button">@color/verde</item>
+    </style>
 ```
 Permissions
 ```
