@@ -1,4 +1,4 @@
-# KnotFIleChooser-Android
+# KnotFileChooser-Android
 
 How To Use
 ```
