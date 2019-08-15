@@ -22,7 +22,7 @@ import java.io.FileFilter
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-open class MaterialFileChooser(
+open class KnotFileChooser(
     val context: Context,
     val allowMultipleFiles: Boolean = false,
     val allowCreateFolder: Boolean = false,
@@ -89,7 +89,7 @@ open class MaterialFileChooser(
     /**
      * Sets the title of the window.
      */
-    fun title(title: CharSequence?): MaterialFileChooser {
+    fun title(title: CharSequence?): KnotFileChooser {
         this.title = title
         return this
     }
@@ -97,24 +97,24 @@ open class MaterialFileChooser(
     /**
      * Sets the title of the window.
      */
-    fun title(@StringRes resId: Int): MaterialFileChooser {
+    fun title(@StringRes resId: Int): KnotFileChooser {
         return title(context.getText(resId))
     }
 
     /**
      * Defines the sorting method for listing files and folders.
      */
-    fun sorter(sorter: Sorter): MaterialFileChooser {
+    fun sorter(sorter: Sorter): KnotFileChooser {
         sort = sorter
         return this
     }
 
-    fun onSelectedFilesListener(listener: (files: List<File>) -> Unit): MaterialFileChooser {
+    fun onSelectedFilesListener(listener: (files: List<File>) -> Unit): KnotFileChooser {
         onSelectedFilesListener = listener
         return this
     }
 
-    private fun defaultHomeFolder(folder: File): MaterialFileChooser {
+    private fun defaultHomeFolder(folder: File): KnotFileChooser {
         initialFolder = folder
         file = folder
         //Clear the Path
@@ -310,11 +310,11 @@ open class MaterialFileChooser(
         init {
             dialog = this
             customView(R.layout.dialog_file_chooser, false)
-            if (this@MaterialFileChooser.title.isNullOrEmpty()) mTitle.visibility = View.GONE else mTitle.text =
-                this@MaterialFileChooser.title
+            if (this@KnotFileChooser.title.isNullOrEmpty()) mTitle.visibility = View.GONE else mTitle.text =
+                this@KnotFileChooser.title
             positiveText(android.R.string.ok)
             negativeText(android.R.string.cancel)
-            backgroundColor(this@MaterialFileChooser.backgroundColor)
+            backgroundColor(this@KnotFileChooser.backgroundColor)
             positiveColor(forgroundColor)
             negativeColor(forgroundColor)
             mSwipeRefreshLayout.setColorSchemeColors(forgroundColor)
@@ -416,7 +416,7 @@ open class MaterialFileChooser(
                     .negativeText(android.R.string.cancel)
                     .negativeColor(cancelTheme)
                     .positiveColor(okTheme)
-                    .backgroundColor(this@MaterialFileChooser.backgroundColor)
+                    .backgroundColor(this@KnotFileChooser.backgroundColor)
                     .input(R.string.type_folder_name, 0, false) { _, input ->
                         val newFolder = File(file, input.toString())
                         try {
