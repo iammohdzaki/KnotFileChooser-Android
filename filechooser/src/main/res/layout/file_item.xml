@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?attr/kfc_theme_background"
+              android:orientation="vertical"
+              android:paddingBottom="5dp"
+              android:paddingTop="5dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:orientation="horizontal">
+
+        <RelativeLayout
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="10dp">
+
+            <ImageView
+                    android:id="@+id/fileIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/folder"
+                    android:tint="?attr/kfc_theme_file_icon" />
+
+            <ImageView
+                    android:id="@+id/protectedFile"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:src="@drawable/lock"
+                    android:tint="?attr/kfc_theme_file_flag" />
+
+            <ImageView
+                    android:id="@+id/itemSelectedFolder"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/asterisk"
+                    android:tint="?attr/kfc_theme_file_asterisk" />
+        </RelativeLayout>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="5dp">
+
+            <TextView
+                    android:id="@+id/tvFileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="Test"
+                    android:textColor="?attr/kfc_theme_file_name"
+                    android:textSize="16sp" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/tvFileSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:text="2,3 KB"
+                        android:textColor="?attr/kfc_theme_file_information"
+                        android:textSize="12sp" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="|"
+                        android:textColor="?attr/kfc_theme_file_information"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/lastModificationDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:textColor="?attr/kfc_theme_file_information"
+                        android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
+                android:paddingEnd="5dp">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cbSelectFile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="?attr/kfc_theme_checkbox"
+                    android:checked="false" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
