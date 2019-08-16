@@ -43,16 +43,17 @@ class MainActivity : AppCompatActivity() {
         KnotFileChooser(this,
             allowBrowsing = true,
             allowCreateFolder = true,
-            allowMultipleFiles = true,
-            allowSelectFolder = true,
-            minSelectedFiles = 1,
-            maxSelectedFiles = 3,
-            showFiles = true,
+            allowMultipleFiles = false,
+            allowSelectFolder = false,
+            minSelectedFiles = 0,
+            maxSelectedFiles = 0,
+            showFiles = false,
             showFoldersFirst = true,
             showFolders = true,
             showHiddenFiles = false,
-            initialFolder = Environment.getRootDirectory(),
-            restoreFolder = false)
+            initialFolder = Environment.getExternalStorageDirectory(),
+            restoreFolder = false,
+            cancelable = true)
             .title("Select a File")
             .sorter(Sorter.ByNewestModification)
             .onSelectedFilesListener {

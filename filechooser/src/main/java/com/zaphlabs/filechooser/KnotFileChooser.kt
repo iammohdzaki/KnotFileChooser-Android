@@ -19,6 +19,7 @@ import com.zaphlabs.filechooser.filters.Filter
 import com.zaphlabs.filechooser.utils.*
 import java.io.File
 import java.io.FileFilter
+import java.lang.StringBuilder
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -35,7 +36,8 @@ open class KnotFileChooser(
     val showFiles: Boolean = true,
     val showFolders: Boolean = true,
     val allowBrowsing: Boolean = true,
-    val restoreFolder: Boolean = true
+    val restoreFolder: Boolean = true,
+    val cancelable:Boolean=true
 ) {
 
     //Constants.
@@ -149,9 +151,9 @@ open class KnotFileChooser(
         }
     }
 
-    private fun selectFile(buttonView: CompoundButton?, file: File, selecionar: Boolean) {
+    private fun selectFile(buttonView: CompoundButton?, file: File, selected: Boolean) {
         //Checkbox selection.
-        if (selecionar) {
+        if (selected) {
             //It is not multi-selectable and has a file selected.
             if (!allowMultipleFiles && cbSelectItem != null) {
                 val cb = cbSelectItem!!
@@ -318,7 +320,7 @@ open class KnotFileChooser(
             positiveColor(forgroundColor)
             negativeColor(forgroundColor)
             mSwipeRefreshLayout.setColorSchemeColors(forgroundColor)
-            cancelable(false)
+            cancelable(cancelable)
             canceledOnTouchOutside(false)
             autoDismiss(false)
             //Configure Recycler View
@@ -434,17 +436,27 @@ open class KnotFileChooser(
                 //You have selected the minimum number of files..
                 if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
                     onSelectedFilesListener(archivesList.toList())
+                    //Show directory Path if no file selected
+                    if(archivesList.size == 0){
+                        archivesList.add(getPath())
+                        onSelectedFilesListener(archivesList.toList())
+                    }
                     //Close a dialog.
                     dialog.dismiss()
                 }
 
             }
             onNegative { dialog, _ ->
-                //You have selected the minimum amount of files.
-                if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
-                    //Dismiss a dialog.
+                if(!cancelable){
+                    //You have selected the minimum amount of files.
+                    if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
+                        //Dismiss a dialog.
+                        dialog.dismiss()
+                    }
+                }else{
                     dialog.dismiss()
                 }
+
             }
             dismissListener {
                 //
@@ -471,6 +483,14 @@ open class KnotFileChooser(
                 dialog.mQuantityItemsSelected.text =
                     context.getString(R.string.singular_selected_item, archivesList.size, size.toSizeString())
             }
+        }
+
+        fun getPath():File{
+            val path=StringBuilder()
+            for(i in 1 until mDirectoryPath.itens.size){
+                path.append("/"+mDirectoryPath.itens[i].text)
+            }
+            return File("$path")
         }
 
         private fun containsSelectedFile(parent: File): Boolean {
@@ -501,6 +521,8 @@ open class KnotFileChooser(
             }
         }
     }
+
+
 
     private object ChooserSharedPreference {
 
