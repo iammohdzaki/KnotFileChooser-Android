@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/iammohdzaki/KnotFileChooser-Android.svg)](https://jitpack.io/#iammohdzaki/KnotFileChooser-Android)
+
 # KnotFileChooser-Android
 
 To get a Git project into your build:
@@ -15,30 +17,31 @@ allprojects {
 Step 2. Add the dependency
 ```
 dependencies {
-	        implementation 'com.github.iammohdzaki:KnotFileChooser-Android:Tag'
+	        implementation 'com.github.iammohdzaki:KnotFileChooser-Android:1.0.1'
 	}
 ```
 How To Use
 ```
 KnotFileChooser(this,
-                allowBrowsing = true,
-                allowCreateFolder = true,
-                allowMultipleFiles = true,
-                allowSelectFolder = true,
-                minSelectedFiles = 1,
-                maxSelectedFiles = 3,
-                showFiles = true,
-                showFoldersFirst = true,
-                showFolders = true,
-                showHiddenFiles = false,
-                initialFolder = Environment.getRootDirectory(),
-                restoreFolder = false)
-                .title("Select a file")
-                .sorter(Sorter.ByNewestModification)
-                .onSelectedFilesListener {
-                    Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
-                }
-                .show()
+            allowBrowsing = true,
+            allowCreateFolder = true,
+            allowMultipleFiles = false,
+            allowSelectFolder = false,
+            minSelectedFiles = 0,
+            maxSelectedFiles = 0,
+            showFiles = true,
+            showFoldersFirst = true,
+            showFolders = true,
+            showHiddenFiles = false,
+            initialFolder = Environment.getExternalStorageDirectory(),
+            restoreFolder = false,
+            cancelable = true) //Dismiss Dialog On Cancel
+            .title("Select a File")
+            .sorter(Sorter.ByNewestModification)
+            .onSelectedFilesListener {
+                Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+            }
+            .show()
 ```
 Customise
 ```
@@ -76,7 +79,7 @@ License
 ```
 The MIT License (MIT)
 
-Copyright (c) 2018 Tiago Melo & Mohammad Zaki
+Copyright (c) 2019 Tiago Melo & Mohammad Zaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
