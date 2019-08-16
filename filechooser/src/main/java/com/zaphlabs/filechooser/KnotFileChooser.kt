@@ -517,6 +517,7 @@ open class KnotFileChooser(
                 "mp3" -> R.drawable.mp3
                 "pdf" -> R.drawable.pdf
                 "txt" -> R.drawable.txt
+                "db" -> R.drawable.db_file
                 else -> R.drawable.archive
             }
         }

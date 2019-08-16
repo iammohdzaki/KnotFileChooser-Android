@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             allowSelectFolder = false,
             minSelectedFiles = 0,
             maxSelectedFiles = 0,
-            showFiles = false,
+            showFiles = true,
             showFoldersFirst = true,
             showFolders = true,
             showHiddenFiles = false,
