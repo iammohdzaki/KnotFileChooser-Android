@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
             allowCreateFolder = true,
             allowMultipleFiles = false,
             allowSelectFolder = false,
-            minSelectedFiles = 0,
-            maxSelectedFiles = 0,
+            minSelectedFiles = 1,
+            maxSelectedFiles = 1,
             showFiles = true,
             showFoldersFirst = true,
             showFolders = true,
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             .title("Select a File")
             .sorter(Sorter.ByNewestModification)
             .onSelectedFilesListener {
-                Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it[0].toString(), Toast.LENGTH_SHORT).show()
             }
             .show()
     }

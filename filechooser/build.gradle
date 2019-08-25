@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'kotlin-android'
-group = 'com.zaphlabs.filechooser'
+group = 'com.github.iammohdzaki'
 
 android {
     compileSdkVersion 29

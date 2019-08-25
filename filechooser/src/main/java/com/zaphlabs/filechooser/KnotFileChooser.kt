@@ -27,7 +27,7 @@ open class KnotFileChooser(
     val context: Context,
     val allowMultipleFiles: Boolean = false,
     val allowCreateFolder: Boolean = false,
-    var initialFolder: File = Environment.getExternalStorageDirectory(),
+    var initialFolder: File = Environment.getDataDirectory(),
     val allowSelectFolder: Boolean = false,
     val minSelectedFiles: Int = 0,
     val maxSelectedFiles: Int = Int.MAX_VALUE,
@@ -435,12 +435,12 @@ open class KnotFileChooser(
             onPositive { dialog, _ ->
                 //You have selected the minimum number of files..
                 if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
-                    onSelectedFilesListener(archivesList.toList())
+                    //onSelectedFilesListener(archivesList.toList())
                     //Show directory Path if no file selected
                     if(archivesList.size == 0){
                         archivesList.add(getPath())
-                        onSelectedFilesListener(archivesList.toList())
                     }
+                    onSelectedFilesListener(archivesList.toList())
                     //Close a dialog.
                     dialog.dismiss()
                 }
