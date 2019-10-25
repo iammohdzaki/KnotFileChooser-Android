@@ -42,7 +42,7 @@ internal fun Long.toSizeString(): String {
 
 val File.sizeAsString: String get() = this.size.toSizeString()
 
-val File.lastModified: String get() = TimeFormatter.format(Date(this.lastModified()))
+val File.lastModified: String get() = DateUtil.getRelativeTimeWithCurrentTime(Date(this.lastModified()))
 
 val File.count: Int get() = if (this.isFolder) this.listFiles()?.size ?: 0 else 0
 
