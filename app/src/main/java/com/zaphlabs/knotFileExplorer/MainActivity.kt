@@ -2,6 +2,7 @@ package com.zaphlabs.knotFileExplorer
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
@@ -49,21 +50,20 @@ class MainActivity : AppCompatActivity() {
             allowCreateFolder = true,
             allowMultipleFiles = false,
             allowSelectFolder = false,
-            minSelectedFiles = 0,
-            maxSelectedFiles = 0,
-            showFiles = false,
+            minSelectedFiles = 1,
+            maxSelectedFiles = 1,
+            showFiles = true,
             showFoldersFirst = true,
             showFolders = true,
             showHiddenFiles = false,
             initialFolder = Environment.getExternalStorageDirectory(),
             restoreFolder = false,
             cancelable = true,
-            fileType = KnotFileChooser.FileType.ALL)
+            fileType = KnotFileChooser.FileType.IMAGE)
             .title("Select a File")
             .sorter(Sorter.ByNewestModification)
             .onSelectedFilesListener {
-                Toast.makeText(this, it[0].toString(), Toast.LENGTH_SHORT).show()
-                tvResult.text = it.toString()
+                tvResult.text = Uri.fromFile(it[0]).toString()
             }
             .show()
     }
