@@ -37,7 +37,8 @@ open class KnotFileChooser(
     val showFolders: Boolean = true,
     val allowBrowsing: Boolean = true,
     val restoreFolder: Boolean = true,
-    val cancelable:Boolean=true
+    val cancelable:Boolean=true,
+    val fileType:FileType=FileType.ALL
 ) {
 
     //Constants.
@@ -326,6 +327,12 @@ open class KnotFileChooser(
             //Configure Recycler View
             mListFileFolders.layoutManager = LinearLayoutManager(context)
             archivesListAdapter.map<File>(R.layout.file_item) { file, injector ->
+                //Check If the File Type is Matched
+                if(file.isFile){
+                    if(!checkFileType(file.extension)){
+                        return@map
+                    }
+                }
                 //Set File Icon.
                 injector.image(
                     R.id.fileIcon,
@@ -522,6 +529,42 @@ open class KnotFileChooser(
         }
     }
 
+    /**
+     * Checks If the extension matches a specific file Type
+     */
+    fun checkFileType(extension:String): Boolean{
+        when(fileType){
+            FileType.ALL -> {
+                return true
+            }
+            FileType.IMAGE -> {
+                if (extension == "jpg" || extension == "jpeg"){
+                    return true
+                }
+            }
+            FileType.VIDEO -> {
+                if(extension == "mp4" || extension == "mkv" || extension == "3gp"){
+                    return true
+                }
+            }
+            FileType.DB -> {
+                if(extension == "db"){
+                    return true
+                }
+            }
+            FileType.DOC -> {
+                if(extension == "doc"){
+                    return true
+                }
+            }
+            FileType.PDF -> {
+                if(extension == "pdf"){
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
 
     private object ChooserSharedPreference {
@@ -587,6 +630,8 @@ open class KnotFileChooser(
         }
     }
 
+
+
     private inner class ChooserTextWatcher : TextWatcher {
 
         override fun afterTextChanged(s: Editable) {
@@ -600,4 +645,16 @@ open class KnotFileChooser(
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         }
     }
+
+    enum class FileType{
+        ALL,
+        IMAGE,
+        DB,
+        DOC,
+        PDF,
+        MUSIC,
+        VIDEO,
+        CODE
+    }
+
 }

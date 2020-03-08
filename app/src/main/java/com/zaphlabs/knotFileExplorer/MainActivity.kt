@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.zaphlabs.filechooser.KnotFileChooser
 import com.zaphlabs.filechooser.Sorter
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,14 +19,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                1234)
-        } else {
-            showMaterialFileChooser()
+        btnOpen.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    1234)
+            } else {
+                showMaterialFileChooser()
+            }
         }
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -53,11 +57,13 @@ class MainActivity : AppCompatActivity() {
             showHiddenFiles = false,
             initialFolder = Environment.getExternalStorageDirectory(),
             restoreFolder = false,
-            cancelable = true)
+            cancelable = true,
+            fileType = KnotFileChooser.FileType.ALL)
             .title("Select a File")
             .sorter(Sorter.ByNewestModification)
             .onSelectedFilesListener {
-                Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, it[0].toString(), Toast.LENGTH_SHORT).show()
+                tvResult.text = it.toString()
             }
             .show()
     }
