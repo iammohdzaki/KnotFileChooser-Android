@@ -1,6 +1,7 @@
 package com.zaphlabs.filechooser
 
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import androidx.annotation.StringRes
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -37,7 +38,8 @@ open class KnotFileChooser(
     val showFolders: Boolean = true,
     val allowBrowsing: Boolean = true,
     val restoreFolder: Boolean = true,
-    val cancelable:Boolean=true
+    val cancelable:Boolean=true,
+    val fileType:FileType=FileType.ALL
 ) {
 
     //Constants.
@@ -82,6 +84,7 @@ open class KnotFileChooser(
     private var currentArchives: List<File> = Collections.emptyList()
     private var selectedArchiveTotalSize = 0L
     private var onSelectedFilesListener: (files: List<File>) -> Unit = {}
+    private var onSelectedFileUriListener: (files: List<Uri>) -> Unit = {}
 
     init {
         //Default Home Folder.
@@ -113,6 +116,11 @@ open class KnotFileChooser(
 
     fun onSelectedFilesListener(listener: (files: List<File>) -> Unit): KnotFileChooser {
         onSelectedFilesListener = listener
+        return this
+    }
+
+    fun onSelectedFileUriListener(listener: (files: List<Uri>) -> Unit): KnotFileChooser {
+        onSelectedFileUriListener = listener
         return this
     }
 
@@ -326,6 +334,12 @@ open class KnotFileChooser(
             //Configure Recycler View
             mListFileFolders.layoutManager = LinearLayoutManager(context)
             archivesListAdapter.map<File>(R.layout.file_item) { file, injector ->
+                //Check If the File Type is Matched
+                if(file.isFile){
+                    if(!checkFileType(file.extension)){
+                        return@map
+                    }
+                }
                 //Set File Icon.
                 injector.image(
                     R.id.fileIcon,
@@ -433,14 +447,21 @@ open class KnotFileChooser(
                     }.show()
             }
             onPositive { dialog, _ ->
+                //Two CallBack will be returned one for List of Files and other for List of File Uri
                 //You have selected the minimum number of files..
                 if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
-                    //onSelectedFilesListener(archivesList.toList())
+                    onSelectedFilesListener(archivesList.toList())
                     //Show directory Path if no file selected
                     if(archivesList.size == 0){
                         archivesList.add(getPath())
+                        onSelectedFilesListener(archivesList.toList())
                     }
-                    onSelectedFilesListener(archivesList.toList())
+                    //Send File URI Callback
+                    val fileUri: MutableSet<Uri> = Collections.newSetFromMap(ConcurrentHashMap<Uri, Boolean>())
+                    for(file in archivesList){
+                        fileUri.add(Uri.fromFile(file))
+                    }
+                    onSelectedFileUriListener(fileUri.toList())
                     //Close a dialog.
                     dialog.dismiss()
                 }
@@ -523,6 +544,42 @@ open class KnotFileChooser(
         }
     }
 
+    /**
+     * Checks If the extension matches a specific file Type
+     */
+    fun checkFileType(extension:String): Boolean{
+        when(fileType){
+            FileType.ALL -> {
+                return true
+            }
+            FileType.IMAGE -> {
+                if (extension == "jpg" || extension == "jpeg"){
+                    return true
+                }
+            }
+            FileType.VIDEO -> {
+                if(extension == "mp4" || extension == "mkv" || extension == "3gp"){
+                    return true
+                }
+            }
+            FileType.DB -> {
+                if(extension == "db"){
+                    return true
+                }
+            }
+            FileType.DOC -> {
+                if(extension == "doc"){
+                    return true
+                }
+            }
+            FileType.PDF -> {
+                if(extension == "pdf"){
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
 
     private object ChooserSharedPreference {
@@ -588,6 +645,8 @@ open class KnotFileChooser(
         }
     }
 
+
+
     private inner class ChooserTextWatcher : TextWatcher {
 
         override fun afterTextChanged(s: Editable) {
@@ -601,4 +660,16 @@ open class KnotFileChooser(
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         }
     }
+
+    enum class FileType{
+        ALL,
+        IMAGE,
+        DB,
+        DOC,
+        PDF,
+        MUSIC,
+        VIDEO,
+        CODE
+    }
+
 }
