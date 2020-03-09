@@ -1,6 +1,7 @@
 package com.zaphlabs.filechooser
 
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import androidx.annotation.StringRes
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -22,6 +23,7 @@ import java.io.FileFilter
 import java.lang.StringBuilder
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.ArrayList
 
 open class KnotFileChooser(
     val context: Context,
@@ -83,6 +85,7 @@ open class KnotFileChooser(
     private var currentArchives: List<File> = Collections.emptyList()
     private var selectedArchiveTotalSize = 0L
     private var onSelectedFilesListener: (files: List<File>) -> Unit = {}
+    private var onSelectedFileUriListener: (files: List<Uri>) -> Unit = {}
 
     init {
         //Default Home Folder.
@@ -114,6 +117,11 @@ open class KnotFileChooser(
 
     fun onSelectedFilesListener(listener: (files: List<File>) -> Unit): KnotFileChooser {
         onSelectedFilesListener = listener
+        return this
+    }
+
+    fun onSelectedFileUriListener(listener: (files: List<Uri>) -> Unit): KnotFileChooser {
+        onSelectedFileUriListener = listener
         return this
     }
 
@@ -440,6 +448,7 @@ open class KnotFileChooser(
                     }.show()
             }
             onPositive { dialog, _ ->
+                //Two CallBack will be returned one for List of Files and other for List of File Uri
                 //You have selected the minimum number of files..
                 if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
                     onSelectedFilesListener(archivesList.toList())
@@ -448,6 +457,12 @@ open class KnotFileChooser(
                         archivesList.add(getPath())
                         onSelectedFilesListener(archivesList.toList())
                     }
+                    //Send File URI Callback
+                    val fileUri: MutableSet<Uri> = Collections.newSetFromMap(ConcurrentHashMap<Uri, Boolean>())
+                    for(file in archivesList){
+                        fileUri.add(Uri.fromFile(file))
+                    }
+                    onSelectedFileUriListener(fileUri.toList())
                     //Close a dialog.
                     dialog.dismiss()
                 }

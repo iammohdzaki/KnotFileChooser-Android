@@ -59,11 +59,14 @@ class MainActivity : AppCompatActivity() {
             initialFolder = Environment.getExternalStorageDirectory(),
             restoreFolder = false,
             cancelable = true,
-            fileType = KnotFileChooser.FileType.IMAGE)
+            fileType = KnotFileChooser.FileType.ALL)
             .title("Select a File")
             .sorter(Sorter.ByNewestModification)
             .onSelectedFilesListener {
-                tvResult.text = Uri.fromFile(it[0]).toString()
+                //tvResult.text = Uri.fromFile(it[0]).toString()
+            }
+            .onSelectedFileUriListener {
+                tvResult.text = it.toString()
             }
             .show()
     }
