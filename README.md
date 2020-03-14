@@ -41,6 +41,7 @@ KnotFileChooser(this,
             cancelable = true) //Dismiss Dialog On Cancel (Optional)
             .title("Select a File") // Title of Dialog
             .sorter(Sorter.ByNewestModification) // Sort Data (Optional)
+	    fileType = KnotFileChooser.FileType.ALL //Select Which Files you want to show (By Default : ALL)
             .onSelectedFilesListener { // Callback Returns Selected File Object  (Optional)
                 Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -48,6 +49,26 @@ KnotFileChooser(this,
                
             }
             .show()
+```
+File Types
+```
+enum class FileType{
+        ALL,
+        IMAGE,
+        DB,
+        DOC,
+        PDF,
+        MUSIC,
+        VIDEO,
+        CODE
+    }
+```
+Additional Feature
+```
+//If you want user to select a path to save a file then
+	 minSelectedFiles = 0, // Allow User to Selec Minimum Files Selected
+         maxSelectedFiles = 0, // Allow User to Selec Minimum Files Selected
+	 //This will automatically return the path
 ```
 Customise
 ```
