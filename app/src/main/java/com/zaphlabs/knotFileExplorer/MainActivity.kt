@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.zaphlabs.filechooser.KnotFileChooser
 import com.zaphlabs.filechooser.Sorter
+import com.zaphlabs.filechooser.utils.FileType
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -22,9 +23,9 @@ class MainActivity : AppCompatActivity() {
 
         btnOpen.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     1234)
             } else {
                 showMaterialFileChooser()
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             initialFolder = Environment.getExternalStorageDirectory(),
             restoreFolder = false,
             cancelable = true,
-            fileType = KnotFileChooser.FileType.ALL)
+            fileType = FileType.ALL)
             .title("Select a File")
             .sorter(Sorter.ByNewestModification)
             .onSelectedFilesListener {

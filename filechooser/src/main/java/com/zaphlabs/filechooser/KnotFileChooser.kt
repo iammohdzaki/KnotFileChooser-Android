@@ -1,6 +1,8 @@
 package com.zaphlabs.filechooser
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import androidx.annotation.StringRes
@@ -12,11 +14,13 @@ import android.text.*
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
+import androidx.core.content.ContextCompat
 import br.tiagohm.breadcrumbview.BreadCrumbItem
 import br.tiagohm.breadcrumbview.BreadCrumbView
 import br.tiagohm.easyadapter.EasyAdapter
 import com.afollestad.materialdialogs.MaterialDialog
 import com.zaphlabs.filechooser.filters.Filter
+import com.zaphlabs.filechooser.preference.ChooserSharedPreference
 import com.zaphlabs.filechooser.utils.*
 import java.io.File
 import java.io.FileFilter
@@ -38,8 +42,8 @@ open class KnotFileChooser(
     val showFolders: Boolean = true,
     val allowBrowsing: Boolean = true,
     val restoreFolder: Boolean = true,
-    val cancelable:Boolean=true,
-    val fileType:FileType=FileType.ALL
+    val cancelable: Boolean = true,
+    val fileType: FileType = FileType.ALL
 ) {
 
     //Constants.
@@ -74,7 +78,8 @@ open class KnotFileChooser(
 
     //Variables.
     private var title: CharSequence? = ""
-    private val archivesList: MutableSet<File> = Collections.newSetFromMap(ConcurrentHashMap<File, Boolean>())
+    private val archivesList: MutableSet<File> =
+        Collections.newSetFromMap(ConcurrentHashMap<File, Boolean>())
     private var cbSelectItem: CheckBox? = null
     private var selectedFile: File? = null
     private lateinit var file: File
@@ -88,7 +93,13 @@ open class KnotFileChooser(
 
     init {
         //Default Home Folder.
-        defaultHomeFolder(ChooserSharedPreference.getPreviouslySelectedDirectory(context, restoreFolder, initialFolder))
+        defaultHomeFolder(
+            ChooserSharedPreference.getPreviouslySelectedDirectory(
+                context,
+                restoreFolder,
+                initialFolder
+            )
+        )
     }
 
     /**
@@ -295,6 +306,12 @@ open class KnotFileChooser(
      * Exit a dialog.
      */
     fun show() {
+        //Check If Write permission is granted
+        if (ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(context, "Please Grant Read Permission", Toast.LENGTH_SHORT).show()
+            return
+        }
         DialogBuilder()
         dialog.show()
     }
@@ -303,7 +320,11 @@ open class KnotFileChooser(
 
         //Views on the Dialog.
         val mTitle: TextView by lazy { customView.findViewById<TextView>(R.id.tvTitle) }
-        val mDirectoryPath: BreadCrumbView<File> by lazy { customView.findViewById<BreadCrumbView<File>>(R.id.directoryPath) }
+        val mDirectoryPath: BreadCrumbView<File> by lazy {
+            customView.findViewById<BreadCrumbView<File>>(
+                R.id.directoryPath
+            )
+        }
         val mListFileFolders: RecyclerView by lazy { customView.findViewById<RecyclerView>(R.id.rvArchivesList) }
         val mTotalSize: TextView by lazy { customView.findViewById<TextView>(R.id.totalSize) }
         val mItemQuantity: TextView by lazy { customView.findViewById<TextView>(R.id.tvItemQuantity) }
@@ -313,14 +334,23 @@ open class KnotFileChooser(
         val mSearch: ImageView by lazy { customView.findViewById<ImageView>(R.id.ivSearch) }
         val mSearchField: EditText by lazy { customView.findViewById<EditText>(R.id.etSearch) }
         val mSearchView: View by lazy { customView.findViewById<View>(R.id.flSearchBox) }
-        val mSwipeRefreshLayout: SwipeRefreshLayout by lazy { customView.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout) }
+        val mSwipeRefreshLayout: SwipeRefreshLayout by lazy {
+            customView.findViewById<SwipeRefreshLayout>(
+                R.id.swipeRefreshLayout
+            )
+        }
         val mSelectAll: CheckBox by lazy { customView.findViewById<CheckBox>(R.id.cbSelectAll) }
-        val mCreateFolder: FloatingActionButton by lazy { customView.findViewById<FloatingActionButton>(R.id.fbAddFolder) }
+        val mCreateFolder: FloatingActionButton by lazy {
+            customView.findViewById<FloatingActionButton>(
+                R.id.fbAddFolder
+            )
+        }
 
         init {
             dialog = this
             customView(R.layout.dialog_file_chooser, false)
-            if (this@KnotFileChooser.title.isNullOrEmpty()) mTitle.visibility = View.GONE else mTitle.text =
+            if (this@KnotFileChooser.title.isNullOrEmpty()) mTitle.visibility =
+                View.GONE else mTitle.text =
                 this@KnotFileChooser.title
             positiveText(android.R.string.ok)
             negativeText(android.R.string.cancel)
@@ -335,8 +365,8 @@ open class KnotFileChooser(
             mListFileFolders.layoutManager = LinearLayoutManager(context)
             archivesListAdapter.map<File>(R.layout.file_item) { file, injector ->
                 //Check If the File Type is Matched
-                if(file.isFile){
-                    if(!checkFileType(file.extension)){
+                if (file.isFile) {
+                    if (!file.extension.checkFileType(fileType)) {
                         return@map
                     }
                 }
@@ -360,7 +390,8 @@ open class KnotFileChooser(
                     injector.text(R.id.tvFileSize, file.sizeAsString)
                 } else {
                     val itemCount = file.count(chooserFileFilter)
-                    val stringRes = if (itemCount > 1) R.string.plural_items else R.string.singular_item
+                    val stringRes =
+                        if (itemCount > 1) R.string.plural_items else R.string.singular_item
                     injector.text(R.id.tvFileSize, context.getString(stringRes, itemCount))
                 }
                 injector.text(R.id.lastModificationDate, file.lastModified)
@@ -424,6 +455,17 @@ open class KnotFileChooser(
             archivesListAdapter.attachTo(mListFileFolders)
             //Create Folder.
             mCreateFolder.setOnClickListener {
+                //Check If Write permission is granted
+                if (ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    Toast.makeText(context, "Please Grant Write Permission", Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                }
+
                 MaterialDialog.Builder(context)
                     .title(R.string.create_new_folder)
                     .titleColor(titleTheme)
@@ -442,7 +484,8 @@ open class KnotFileChooser(
                                 loadCurrentFolder()
                             }
                         } catch (e: Exception) {
-                            Toast.makeText(context, "error: " + e.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "error: " + e.message, Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }.show()
             }
@@ -452,13 +495,14 @@ open class KnotFileChooser(
                 if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
                     onSelectedFilesListener(archivesList.toList())
                     //Show directory Path if no file selected
-                    if(archivesList.size == 0){
+                    if (archivesList.size == 0) {
                         archivesList.add(getPath())
                         onSelectedFilesListener(archivesList.toList())
                     }
                     //Send File URI Callback
-                    val fileUri: MutableSet<Uri> = Collections.newSetFromMap(ConcurrentHashMap<Uri, Boolean>())
-                    for(file in archivesList){
+                    val fileUri: MutableSet<Uri> =
+                        Collections.newSetFromMap(ConcurrentHashMap<Uri, Boolean>())
+                    for (file in archivesList) {
                         fileUri.add(Uri.fromFile(file))
                     }
                     onSelectedFileUriListener(fileUri.toList())
@@ -468,13 +512,13 @@ open class KnotFileChooser(
 
             }
             onNegative { dialog, _ ->
-                if(!cancelable){
+                if (!cancelable) {
                     //You have selected the minimum amount of files.
                     if (archivesList.size in minSelectedFiles..maxSelectedFiles) {
                         //Dismiss a dialog.
                         dialog.dismiss()
                     }
-                }else{
+                } else {
                     dialog.dismiss()
                 }
 
@@ -490,6 +534,7 @@ open class KnotFileChooser(
             mSelectAll.visibility = if (allowMultipleFiles) View.VISIBLE else View.GONE
             //Allow create folder.
             dialog.mCreateFolder.visibility = if (allowCreateFolder) View.VISIBLE else View.GONE
+
             //Start.
             displayQuantityOfSelectedItems(0)
             loadCurrentFolder()
@@ -499,17 +544,25 @@ open class KnotFileChooser(
             //Updates the number of folders selected by plurality.
             if (archivesList.size > 1) {
                 dialog.mQuantityItemsSelected.text =
-                    context.getString(R.string.plural_selected_items, archivesList.size, size.toSizeString())
+                    context.getString(
+                        R.string.plural_selected_items,
+                        archivesList.size,
+                        size.toSizeString()
+                    )
             } else {
                 dialog.mQuantityItemsSelected.text =
-                    context.getString(R.string.singular_selected_item, archivesList.size, size.toSizeString())
+                    context.getString(
+                        R.string.singular_selected_item,
+                        archivesList.size,
+                        size.toSizeString()
+                    )
             }
         }
 
-        fun getPath():File{
-            val path=StringBuilder()
-            for(i in 1 until mDirectoryPath.itens.size){
-                path.append("/"+mDirectoryPath.itens[i].text)
+        fun getPath(): File {
+            val path = StringBuilder()
+            for (i in 1 until mDirectoryPath.itens.size) {
+                path.append("/" + mDirectoryPath.itens[i].text)
             }
             return File("$path")
         }
@@ -541,64 +594,6 @@ open class KnotFileChooser(
                 "db" -> R.drawable.db_file
                 else -> R.drawable.archive
             }
-        }
-    }
-
-    /**
-     * Checks If the extension matches a specific file Type
-     */
-    fun checkFileType(extension:String): Boolean{
-        when(fileType){
-            FileType.ALL -> {
-                return true
-            }
-            FileType.IMAGE -> {
-                if (extension == "jpg" || extension == "jpeg"){
-                    return true
-                }
-            }
-            FileType.VIDEO -> {
-                if(extension == "mp4" || extension == "mkv" || extension == "3gp"){
-                    return true
-                }
-            }
-            FileType.DB -> {
-                if(extension == "db"){
-                    return true
-                }
-            }
-            FileType.DOC -> {
-                if(extension == "doc"){
-                    return true
-                }
-            }
-            FileType.PDF -> {
-                if(extension == "pdf"){
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-
-    private object ChooserSharedPreference {
-
-        private const val NAME = "knotfilechooser_prefs"
-        private const val PREVIOUS_SELECTED_FOLDER = "prev_selected_folder"
-
-        fun getPreviouslySelectedDirectory(context: Context, restoreFolder: Boolean, initialFolder: File): File {
-            if (!restoreFolder) return initialFolder
-            val path = context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
-                .getString(PREVIOUS_SELECTED_FOLDER, null)
-            return if (path != null) File(path) else initialFolder
-        }
-
-        fun setPreviouslySelectedDirectory(context: Context, file: File) {
-            context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
-                .edit()
-                .putString(PREVIOUS_SELECTED_FOLDER, file.absolutePath)
-                .apply()
         }
     }
 
@@ -646,7 +641,6 @@ open class KnotFileChooser(
     }
 
 
-
     private inner class ChooserTextWatcher : TextWatcher {
 
         override fun afterTextChanged(s: Editable) {
@@ -659,17 +653,6 @@ open class KnotFileChooser(
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         }
-    }
-
-    enum class FileType{
-        ALL,
-        IMAGE,
-        DB,
-        DOC,
-        PDF,
-        MUSIC,
-        VIDEO,
-        CODE
     }
 
 }
