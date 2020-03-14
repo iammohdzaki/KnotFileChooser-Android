@@ -1,4 +1,5 @@
 [![](https://jitpack.io/v/iammohdzaki/KnotFileChooser-Android.svg)](https://jitpack.io/#iammohdzaki/KnotFileChooser-Android)
+[![Android Arsenal]( https://img.shields.io/badge/Android%20Arsenal-Knot%20File%20Chooser-green.svg?style=flat )]( https://android-arsenal.com/details/1/8056 )
 
 # KnotFileChooser-Android
 
@@ -19,31 +20,55 @@ allprojects {
 Step 2. Add the dependency
 ```
 dependencies {
-	        implementation 'com.github.iammohdzaki:KnotFileChooser-Android:1.0.1'
+	        implementation 'com.github.iammohdzaki:KnotFileChooser-Android:1.0.3'
 	}
 ```
 How To Use
 ```
 KnotFileChooser(this,
-            allowBrowsing = true,
-            allowCreateFolder = true,
-            allowMultipleFiles = false,
-            allowSelectFolder = false,
-            minSelectedFiles = 0,
-            maxSelectedFiles = 0,
-            showFiles = true,
-            showFoldersFirst = true,
-            showFolders = true,
-            showHiddenFiles = false,
-            initialFolder = Environment.getExternalStorageDirectory(),
-            restoreFolder = false,
-            cancelable = true) //Dismiss Dialog On Cancel
-            .title("Select a File")
-            .sorter(Sorter.ByNewestModification)
-            .onSelectedFilesListener {
+            allowBrowsing = true, // Allow User Browsing 
+            allowCreateFolder = true, // Allow User to create Folder
+            allowMultipleFiles = false, // Allow User to Select Multiple Files
+            allowSelectFolder = false, // Allow User to Select Folder
+            minSelectedFiles = 0, // Allow User to Selec Minimum Files Selected
+            maxSelectedFiles = 0, // Allow User to Selec Minimum Files Selected
+            showFiles = true, // Show Files or Show Folder Only
+            showFoldersFirst = true, // Show Folders First or Only Files
+            showFolders = true, //Show Folders
+            showHiddenFiles = false, // Show System Hidden Files
+            initialFolder = Environment.getExternalStorageDirectory(), //Initial Folder 
+            restoreFolder = false, //Restore Folder After Adding
+            cancelable = true) //Dismiss Dialog On Cancel (Optional)
+            .title("Select a File") // Title of Dialog
+            .sorter(Sorter.ByNewestModification) // Sort Data (Optional)
+	    fileType = KnotFileChooser.FileType.ALL //Select Which Files you want to show (By Default : ALL)
+            .onSelectedFilesListener { // Callback Returns Selected File Object  (Optional)
                 Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
             }
+	    .onSelectedFileUriListener { // Callback Returns Uri of File (Optional)
+               
+            }
             .show()
+```
+File Types
+```
+enum class FileType{
+        ALL,
+        IMAGE,
+        DB,
+        DOC,
+        PDF,
+        MUSIC,
+        VIDEO,
+        CODE
+    }
+```
+Additional Feature
+```
+//If you want user to select a path to save a file then
+	 minSelectedFiles = 0, // Allow User to Selec Minimum Files Selected
+         maxSelectedFiles = 0, // Allow User to Selec Minimum Files Selected
+	 //This will automatically return the path
 ```
 Customise
 ```
