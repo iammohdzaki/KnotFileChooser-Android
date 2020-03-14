@@ -20,7 +20,7 @@ allprojects {
 Step 2. Add the dependency
 ```
 dependencies {
-	        implementation 'com.github.iammohdzaki:KnotFileChooser-Android:1.0.3'
+	        implementation 'com.github.iammohdzaki:KnotFileChooser-Android:$latest_version'
 	}
 ```
 How To Use
@@ -41,7 +41,7 @@ KnotFileChooser(this,
             cancelable = true) //Dismiss Dialog On Cancel (Optional)
             .title("Select a File") // Title of Dialog
             .sorter(Sorter.ByNewestModification) // Sort Data (Optional)
-	    fileType = KnotFileChooser.FileType.ALL //Select Which Files you want to show (By Default : ALL)
+	    fileType = FileType.ALL //Select Which Files you want to show (By Default : ALL)
             .onSelectedFilesListener { // Callback Returns Selected File Object  (Optional)
                 Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -52,16 +52,16 @@ KnotFileChooser(this,
 ```
 File Types
 ```
-enum class FileType{
-        ALL,
-        IMAGE,
-        DB,
-        DOC,
-        PDF,
-        MUSIC,
-        VIDEO,
-        CODE
-    }
+enum class FileType {
+    ALL,
+    DOCUMENTS,
+    AUDIO,
+    VIDEO,
+    IMAGE,
+    DATABASE,
+    CODE,
+    APK
+}
 ```
 Additional Feature
 ```
