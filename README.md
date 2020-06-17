@@ -97,6 +97,10 @@ Customise
         <item name="kfc_theme_create_folder_button">@color/verde</item>
     </style>
 ```
+For Android 10 - Add this in your Manifest 
+```
+android:requestLegacyExternalStorage="true"
+```
 Permissions
 ```
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
